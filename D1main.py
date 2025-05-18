@@ -5,10 +5,8 @@ from D1sampling import apply_smote, apply_rus, plot_distributions
 from D1models import train_and_evaluate
 import os
 
-
 current_dir = os.path.dirname(os.path.abspath(__file__))
 data_path = os.path.join(current_dir, 'data', 'loan_data_new.csv')
-
 df = load_and_encode_data(data_path)
 
 X = df.drop('loan_status', axis=1)
