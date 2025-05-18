@@ -1,7 +1,5 @@
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
-
-
 def select_important_features(X, y, num_features=5):
     model = RandomForestClassifier(random_state=42)
     model.fit(X, y)
