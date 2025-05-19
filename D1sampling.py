@@ -10,7 +10,6 @@ def apply_smote(X, y):
 def apply_rus(X, y):
     rus = RandomUnderSampler(random_state=42)
     return rus.fit_resample(X, y)
-
 def plot_distributions(y_original, y_smote, y_rus):
     fig, axs = plt.subplots(1, 3, figsize=(18, 4))
     sns.countplot(x=y_original, ax=axs[0])
