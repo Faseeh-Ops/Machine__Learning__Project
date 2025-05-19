@@ -86,5 +86,4 @@ def train_and_evaluate(X, y, output_dir, train_test_split_needed=True):
 
     results_df = pd.DataFrame(results)
     results_df.to_csv(os.path.join(output_dir, 'classification_reports.csv'), index=False)
-
     return results_df

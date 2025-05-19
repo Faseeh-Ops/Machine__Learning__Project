@@ -8,7 +8,6 @@ from sklearn.model_selection import train_test_split
 import sklearn
 import os
 
-
 def load_and_preprocess_data(data_path, for_clustering=True):
     # Load the dataset
     df = pd.read_csv(data_path, na_values='?')

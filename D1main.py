@@ -100,7 +100,6 @@ plt.title('DBSCAN Clusters')
 plt.savefig(os.path.join(output_dir, 'dbscan_clusters.png'))
 plt.close()
 
-
 clustering_results = pd.DataFrame({
     'k': k_range,
     'Inertia': inertia,

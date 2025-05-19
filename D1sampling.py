@@ -3,7 +3,6 @@ from imblearn.over_sampling import SMOTE
 from imblearn.under_sampling import RandomUnderSampler
 import seaborn as sns
 import matplotlib.pyplot as plt
-
 def apply_smote(X, y):
     smote = SMOTE(random_state=42)
     return smote.fit_resample(X, y)

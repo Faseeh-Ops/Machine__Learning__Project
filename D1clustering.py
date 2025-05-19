@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 from sklearn.metrics import silhouette_samples
-
 def find_optimal_k(X_scaled, max_k=15):
     inertias = []
     silhouette_scores = []

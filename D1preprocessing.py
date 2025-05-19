@@ -3,7 +3,6 @@ from sklearn.feature_selection import SelectKBest, mutual_info_classif, Variance
 from sklearn.decomposition import PCA
 import pandas as pd
 import numpy as np
-
 def scale_features(X):
     scaler = RobustScaler()
     return scaler.fit_transform(X)
