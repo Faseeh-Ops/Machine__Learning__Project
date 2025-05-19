@@ -9,7 +9,6 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-
 def get_classifiers():
     return {
         'LogisticRegression': LogisticRegression(max_iter=2000, class_weight='balanced', random_state=42),
