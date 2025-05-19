@@ -6,7 +6,6 @@ import numpy as np
 def scale_features(X):
     scaler = RobustScaler()
     return scaler.fit_transform(X)
-
 def select_features(X, y, k=10):
     # Ensure X is a DataFrame
     if not isinstance(X, pd.DataFrame):
