@@ -27,7 +27,6 @@ def find_optimal_k(X_scaled, max_k=15):
     plt.grid(True)
     plt.show()
 
-
     plt.figure(figsize=(8, 5))
     plt.plot(range(2, max_k + 1), silhouette_scores, 'ro-')
     plt.title('Silhouette Scores for Different K')
