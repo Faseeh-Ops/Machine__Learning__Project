@@ -1,7 +1,6 @@
 import pandas as pd
 
 
-
 def preprocess_data(df):
     df = df.drop(['Name', 'Ticket', 'Cabin'], axis=1)
 
