@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from D1dataloader import get_data
 from D1models import train_and_evaluate
-from D1sampling import apply_smote, apply_rus, plot_distributions  # <-- Added for class balancing
+from D1sampling import apply_smote, apply_rus, plot_distributions
 
 np.random.seed(42)
 
@@ -17,19 +17,19 @@ data_path = os.path.join(current_dir, 'data', 'adult.csv')
 output_dir = os.path.join(current_dir, 'outputs')
 os.makedirs(output_dir, exist_ok=True)
 
-
+# Supervised learning data
 X_train, X_test, y_train, y_test = get_data(data_path, for_clustering=False)
 
-
+# --- Class Balance Visualization (before/after balancing) ---
 print("\nClass distribution BEFORE balancing (train set):")
 print(y_train.value_counts())
 
-
+# Apply SMOTE
 X_smote, y_smote = apply_smote(X_train, y_train)
 print("\nClass distribution AFTER SMOTE:")
 print(pd.Series(y_smote).value_counts())
 
-
+# Apply Random Under Sampler
 X_rus, y_rus = apply_rus(X_train, y_train)
 print("\nClass distribution AFTER Random Under Sampler:")
 print(pd.Series(y_rus).value_counts())
@@ -39,17 +39,17 @@ plot_distributions(y_train, y_smote, y_rus)
 plt.savefig(os.path.join(output_dir, 'class_balance_comparison.png'))
 plt.show()
 plt.close()
-
+# -------------------------------------------------------------
 
 print("\nSupervised Learning Results:")
 results_df = train_and_evaluate(
     (X_train, X_test, y_train, y_test),
-    None,
+    None,  # y not needed since split is provided
     output_dir,
     train_test_split_needed=False
 )
 
-print("Unsupervised Learniing Techniques")
+# Unsupervised learning (clustering)
 X = get_data(data_path, for_clustering=True)
 
 pca = PCA(n_components=10)
@@ -91,32 +91,42 @@ if n_clusters_dbscan >= 2:
 else:
     print("DBSCAN: Too few clusters for Silhouette/Davies-Bouldin scores")
 
+# PCA for visualization (2D)
 pca_viz = PCA(n_components=2)
 X_pca_viz = pca_viz.fit_transform(X)
 explained_variance_viz = pca_viz.explained_variance_ratio_.sum()
 print(f"PCA Explained Variance Ratio (2 components): {explained_variance_viz:.4f}")
 
+def plot_clusters_with_colorbar(X_2d, labels, title, filename):
+    plt.figure(figsize=(8, 6))
+    scatter = plt.scatter(X_2d[:, 0], X_2d[:, 1], c=labels, cmap='viridis', s=30, alpha=0.8)
+    plt.xlabel('PCA 1')
+    plt.ylabel('PCA 2')
+    plt.title(title)
+    cbar = plt.colorbar(scatter)
+    cbar.set_label('Cluster Label')
+    plt.tight_layout()
+    plt.savefig(filename)
+    plt.show()
+    plt.close()
 
-plt.figure(figsize=(8, 6))
-sns.scatterplot(x=X_pca_viz[:, 0], y=X_pca_viz[:, 1], hue=kmeans_labels, palette='tab10')
-plt.xlabel('PCA Component 1')
-plt.ylabel('PCA Component 2')
-plt.title(f'KMeans Clusters (k={optimal_k})')
-plt.savefig(os.path.join(output_dir, 'kmeans_clusters.png'))
-plt.show()
-plt.close()
+# KMeans cluster plot (display and save, with colorbar)
+plot_clusters_with_colorbar(
+    X_pca_viz,
+    kmeans_labels,
+    f'KMeans Clusters (k={optimal_k})',
+    os.path.join(output_dir, 'kmeans_clusters_colorbar.png')
+)
 
+# DBSCAN cluster plot (display and save, with colorbar)
+plot_clusters_with_colorbar(
+    X_pca_viz,
+    dbscan_labels,
+    'DBSCAN Clusters',
+    os.path.join(output_dir, 'dbscan_clusters_colorbar.png')
+)
 
-plt.figure(figsize=(8, 6))
-sns.scatterplot(x=X_pca_viz[:, 0], y=X_pca_viz[:, 1], hue=dbscan_labels, palette='tab10')
-plt.xlabel('PCA Component 1')
-plt.ylabel('PCA Component 2')
-plt.title('DBSCAN Clusters')
-plt.savefig(os.path.join(output_dir, 'dbscan_clusters.png'))
-plt.show()
-plt.close()
-
-
+# Elbow method plot (display and save)
 plt.figure(figsize=(8, 6))
 plt.plot(list(k_range), inertia, marker='o')
 plt.title('KMeans Elbow Method')
@@ -126,7 +136,7 @@ plt.savefig(os.path.join(output_dir, 'kmeans_elbow.png'))
 plt.show()
 plt.close()
 
-
+# Silhouette score plot (display and save)
 plt.figure(figsize=(8, 6))
 plt.plot(list(k_range), silhouette_scores, marker='o', color='red')
 plt.title('KMeans Silhouette Scores')
@@ -136,7 +146,7 @@ plt.savefig(os.path.join(output_dir, 'kmeans_silhouette.png'))
 plt.show()
 plt.close()
 
-
+# Davies-Bouldin score plot (display and save)
 plt.figure(figsize=(8, 6))
 plt.plot(list(k_range), db_scores, marker='o', color='green')
 plt.title('KMeans Davies-Bouldin Scores')
@@ -146,7 +156,7 @@ plt.savefig(os.path.join(output_dir, 'kmeans_davies_bouldin.png'))
 plt.show()
 plt.close()
 
-
+# Save clustering results to CSV
 clustering_results = pd.DataFrame({
     'k': list(k_range),
     'Inertia': inertia,
