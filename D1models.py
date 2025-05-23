@@ -70,7 +70,7 @@ def train_and_evaluate(X, y, output_dir, train_test_split_needed=True):
         plt.title(f'Confusion Matrix: {name}')
         plt.xlabel('Predicted')
         plt.ylabel('Actual')
-        plt.savefig(os.path.join(output_dir, f'confusion_{name.lower()}.png'))
+        plt.show()
         plt.close()
 
 
